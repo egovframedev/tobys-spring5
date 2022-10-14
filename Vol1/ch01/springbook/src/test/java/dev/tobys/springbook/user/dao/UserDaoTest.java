@@ -12,15 +12,15 @@ class UserDaoTest {
 
     @BeforeEach
     void setUp() {
-        dao = new UserDao();
+        dao = new NUserDao();
     }
 
     @Test
     void addUserTest() throws Exception {
         User user = new User();
-        user.setId("mrhong");
-        user.setName("홍길동");
-        user.setPassword("married");
+        user.setId("kangchan");
+        user.setName("감강찬");
+        user.setPassword("single");
 
         dao.add(user);
 
@@ -29,7 +29,7 @@ class UserDaoTest {
 
     @Test
     void getUserTest() throws Exception {
-        User user = dao.get("mrhong");
+        User user = dao.get("kangchan");
 
         System.out.println(user.getId());
         System.out.println(user.getName());

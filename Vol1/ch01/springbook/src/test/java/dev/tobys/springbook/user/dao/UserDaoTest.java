@@ -10,9 +10,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserDaoTest {
     private UserDao dao;
 
+    // 관계설정 책입이 추가된 UserDao 클라이언트인 setUp() 메소드
     @BeforeEach
     void setUp() {
-        dao = new UserDao();
+        // UserDao가 사용할 ConnectionMaker  구현 클래스를 결정하고 오브젝트를 생성한다.
+        ConnectionMaker connectionMaker = new DConnectionMaker();
+        dao = new UserDao(connectionMaker); // 사용할 ConnectionMaker 타입의 오브젝트 제공
+        
     }
 
     @Test

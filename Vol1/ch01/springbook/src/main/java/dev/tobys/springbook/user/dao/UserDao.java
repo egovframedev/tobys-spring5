@@ -4,20 +4,20 @@ import dev.tobys.springbook.user.domain.User;
 import java.sql.*;
 
 /**
- * 독립된 SimpleConnectionMaker를 사용하게 만든 UserDao
+ *  ConnectionMaker 인터페이스를 사용하도록 개선한 UserDao
  */
 public class UserDao {
-    private SimpleConnectionMaker simpleConnectionMaker;
+    // 인터페이스를 통해 오브젝트에 접근하므로 구체적인 클래스 정보를 알 필요가 없다.
+    private ConnectionMaker connectionMaker;
 
     public UserDao() {
-        // 상태를 관리하는 것도 아니니 한 번만 만들어 인스턴스 변수에 저장해두고
-        // 메소드에서 사용하게 한다.
-        simpleConnectionMaker = new SimpleConnectionMaker();
-
+        connectionMaker = new DConnectionMaker(); // 앗 그런데 여기에 클래스 이름이 나오네!!
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection c = simpleConnectionMaker.makeNewConnection();
+        // 인터페이스에 정의된 메소드를 사용하므로 클래스가 바뀐다고 해도
+        // 메소드 이름이 변경될 걱정이 없다.
+        Connection c = connectionMaker.makeConnection();
         PreparedStatement ps = c.prepareStatement(
                 "INSERT INTO users(id, name, password) VALUES (?, ?, ?)");
         ps.setString(1, user.getId());
@@ -31,7 +31,7 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection c = simpleConnectionMaker.makeNewConnection();
+        Connection c = connectionMaker.makeConnection();
         PreparedStatement ps = c.prepareStatement("SELECT * FROM users WHERE id = ?");
         ps.setString(1, id);
 

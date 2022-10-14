@@ -18,8 +18,8 @@ class UserDaoTest {
     @Test
     void addUserTest() throws Exception {
         User user = new User();
-        user.setId("whiteship");
-        user.setName("백기선");
+        user.setId("mrhong");
+        user.setName("홍길동");
         user.setPassword("married");
 
         dao.add(user);
@@ -29,7 +29,7 @@ class UserDaoTest {
 
     @Test
     void getUserTest() throws Exception {
-        User user = dao.get("whiteship");
+        User user = dao.get("mrhong");
 
         System.out.println(user.getId());
         System.out.println(user.getName());

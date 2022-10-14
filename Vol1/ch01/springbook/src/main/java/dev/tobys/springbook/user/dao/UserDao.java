@@ -4,11 +4,20 @@ import dev.tobys.springbook.user.domain.User;
 import java.sql.*;
 
 /**
- * 상속을 통한 확장 방법이 제공되는 UserDao
+ * 독립된 SimpleConnectionMaker를 사용하게 만든 UserDao
  */
-public abstract class UserDao {
+public class UserDao {
+    private SimpleConnectionMaker simpleConnectionMaker;
+
+    public UserDao() {
+        // 상태를 관리하는 것도 아니니 한 번만 만들어 인스턴스 변수에 저장해두고
+        // 메소드에서 사용하게 한다.
+        simpleConnectionMaker = new SimpleConnectionMaker();
+
+    }
+
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection c = getConnection();
+        Connection c = simpleConnectionMaker.makeNewConnection();
         PreparedStatement ps = c.prepareStatement(
                 "INSERT INTO users(id, name, password) VALUES (?, ?, ?)");
         ps.setString(1, user.getId());
@@ -22,7 +31,7 @@ public abstract class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection c = getConnection();
+        Connection c = simpleConnectionMaker.makeNewConnection();
         PreparedStatement ps = c.prepareStatement("SELECT * FROM users WHERE id = ?");
         ps.setString(1, id);
 
@@ -39,7 +48,4 @@ public abstract class UserDao {
 
         return user;
     }
-
-    // 중복된 코드를 독립적인 메서드로 만들어서 중복을 제거 했다.
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 }
